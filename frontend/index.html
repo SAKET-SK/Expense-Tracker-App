@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Tracker</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <!-- Login/Register Screen -->
+  <div id="auth-screen" class="screen">
+    <div class="auth-container">
+      <h1>Expense Tracker</h1>
+      <p class="subtitle">AI-Powered Expense Classification</p>
+      
+      <!-- Login Form -->
+      <div id="login-form" class="form-section">
+        <h2>Login</h2>
+        <input type="email" id="login-email" placeholder="Email" required>
+        <input type="password" id="login-password" placeholder="Password" required>
+        <button onclick="login()">Login</button>
+        <p>Don't have an account? <a href="#" onclick="showRegister()">Register</a></p>
+      </div>
+
+      <!-- Register Form -->
+      <div id="register-form" class="form-section" style="display: none;">
+        <h2>Register</h2>
+        <input type="text" id="register-name" placeholder="Full Name" required>
+        <input type="email" id="register-email" placeholder="Email" required>
+        <input type="password" id="register-password" placeholder="Password" required>
+        <button onclick="register()">Register</button>
+        <p>Already have an account? <a href="#" onclick="showLogin()">Login</a></p>
+      </div>
+
+      <div id="auth-error" class="error"></div>
+    </div>
+  </div>
+
+  <!-- Dashboard Screen -->
+  <div id="dashboard-screen" class="screen" style="display: none;">
+    <nav>
+      <h1>💰 Expense Tracker</h1>
+      <div class="nav-right">
+        <span id="user-name"></span>
+        <button onclick="logout()" class="logout-btn">Logout</button>
+      </div>
+    </nav>
+
+    <div class="container">
+      <!-- Upload Section -->
+      <div class="card">
+        <h2>📤 Upload Bank Statement (CSV)</h2>
+        <p class="info-text">Supports CSV and Excel (.xlsx, .xls) files from any Indian bank</p>
+        <div class="upload-area" id="upload-area">
+          <div class="upload-icon">📁</div>
+          <p>Drag & Drop CSV file here or click to browse</p>
+          <p class="file-info">Maximum file size: 10MB</p>
+          <input type="file" id="file-input" accept=".csv,.xlsx,.xls" style="display: none;">
+        </div>
+        <button onclick="uploadCSV()" id="upload-btn" style="display: none;">Upload & Categorize with AI</button>
+        <div id="upload-status"></div>
+      </div>
+
+      <!-- Date Filter -->
+      <div class="card">
+        <h2>Filter by Date Range</h2>
+        <div class="date-filter">
+          <div class="date-input-group">
+            <label>Start Date:</label>
+            <input type="date" id="start-date">
+          </div>
+          <div class="date-input-group">
+            <label>End Date:</label>
+            <input type="date" id="end-date">
+          </div>
+          <button onclick="filterTransactions()">Apply Filter</button>
+          <button onclick="clearFilter()" class="secondary-btn">Clear</button>
+        </div>
+      </div>
+
+      <!-- Summary Section -->
+      <div class="card">
+        <h2>Financial Summary</h2>
+        <div id="summary-cards" class="summary-cards">
+          <div class="summary-card">
+            <h3>Total Spent</h3>
+            <p>₹0.00</p>
+          </div>
+          <div class="summary-card">
+            <h3>Categories</h3>
+            <p>0</p>
+          </div>
+          <div class="summary-card">
+            <h3>Transactions</h3>
+            <p>0</p>
+          </div>
+          <div class="summary-card">
+            <h3>Top Category</h3>
+            <p>N/A</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Section -->
+      <div class="charts-container">
+        <div class="card">
+          <h2>Spending by Category</h2>
+          <canvas id="category-chart"></canvas>
+        </div>
+        <div class="card">
+          <h2>Category-wise Breakdown</h2>
+          <canvas id="time-chart"></canvas>
+        </div>
+      </div>
+
+      <!-- Transactions Table -->
+      <div class="card">
+        <h2>Transaction History</h2>
+        <div class="table-actions">
+          <button onclick="exportCSV()">Export CSV</button>
+          <button onclick="exportPDF()">Export PDF</button>
+          <button onclick="deleteAllTransactions()" class="danger">Delete All</button>
+        </div>
+        <div class="table-container">
+          <table id="transactions-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Amount</th>
+                <th>Type</th>
+              </tr>
+            </thead>
+            <tbody id="transactions-body">
+              <tr>
+                <td colspan="5" class="no-data">No transactions yet. Upload a CSV to get started!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div id="loading-overlay" style="display: none;">
+    <div class="spinner"></div>
+    <p>Processing Please wait...</p>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
